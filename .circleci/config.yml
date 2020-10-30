@@ -1,3 +1,5 @@
+defaults: &defaults
+  working_directory: ~/repo
 version: 2.1
 
 executors:
@@ -11,6 +13,7 @@ executors:
 
 jobs:
   build:
+    <<: *defaults
     executor: ruby
     steps:
       - checkout
@@ -38,14 +41,13 @@ jobs:
               --allow-hash-href \
               --check-favicon  \
               --check-html \
-              --disable-external \
-              --assume_extension
+              --disable-external
       - persist_to_workspace:
-          root: ~/
+          root: ./
           paths:
-            - project/_site
-            - project/*
+            - _site
   deploy:
+    <<: *defaults
     executor: gcp
     steps:
       - attach_workspace:
